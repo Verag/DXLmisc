@@ -35,33 +35,34 @@
 #' @export
 read_excel_allsheets <- function(filename, tibble = FALSE, engine = "readxl", sheet_names = NULL, ...) {
 
-  # Função para verificar e carregar pacotes
+  # Function to check and load required packages
   check_and_load <- function(pkg) {
     if (!requireNamespace(pkg, quietly = TRUE)) {
-      stop(paste0("O pacote '", pkg, "' é necessário, mas não está instalado."))
+      stop(paste0("The package '", pkg, "' is required but not installed. ",
+                  "Please install it using: install.packages('", pkg, "')"))
     }
   }
 
-  # Verificar pacotes necessários
+  # Ensure necessary packages are loaded based on the engine
   check_and_load("janitor")
   if (engine == "readxl") check_and_load("readxl")
   if (engine == "openxlsx") check_and_load("openxlsx")
 
-  # Verificar se o arquivo existe
+  # Check if the file exists
   if (!file.exists(filename)) {
-    stop("O arquivo especificado não foi encontrado.")
+    stop("The specified file was not found: ", filename)
   }
 
-  # Função para limpar os nomes das colunas
+  # Function to clean column names in a dataset
   clean_columns <- function(data) {
     colnames(data) <- janitor::make_clean_names(colnames(data))
     if (!tibble) {
       data <- as.data.frame(data)
     }
-    data
+    return(data)
   }
 
-  # Funções de leitura por engine
+  # Function to read all sheets using the 'readxl' package
   read_with_readxl <- function() {
     sheets <- readxl::excel_sheets(filename)
     if (!is.null(sheet_names)) {
@@ -70,6 +71,7 @@ read_excel_allsheets <- function(filename, tibble = FALSE, engine = "readxl", sh
     purrr::map(sheets, ~ clean_columns(readxl::read_excel(filename, sheet = .x, ...)))
   }
 
+  # Function to read all sheets using the 'openxlsx' package
   read_with_openxlsx <- function() {
     sheets <- openxlsx::getSheetNames(filename)
     if (!is.null(sheet_names)) {
@@ -78,15 +80,17 @@ read_excel_allsheets <- function(filename, tibble = FALSE, engine = "readxl", sh
     purrr::map(sheets, ~ clean_columns(openxlsx::read.xlsx(filename, sheet = .x, ...)))
   }
 
-  # Escolher engine
+  # Select the appropriate engine and read the data
   data_list <- switch(engine,
                       readxl = read_with_readxl(),
                       openxlsx = read_with_openxlsx(),
-                      stop("Engine inválido. Escolha entre 'readxl' ou 'openxlsx'.")
+                      stop("Invalid engine. Choose either 'readxl' or 'openxlsx'.")
   )
 
-  # Nomear listas com nomes das planilhas limpos
-  names(data_list) <- janitor::make_clean_names(if (engine == "readxl") readxl::excel_sheets(filename) else openxlsx::getSheetNames(filename))
+  # Assign clean names to the list elements based on the sheet names
+  sheet_names <- if (engine == "readxl") readxl::excel_sheets(filename) else openxlsx::getSheetNames(filename)
+  names(data_list) <- janitor::make_clean_names(sheet_names)
 
   return(data_list)
 }
+
