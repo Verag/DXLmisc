@@ -2,7 +2,7 @@
 % Please edit documentation in R/CheckUpdateFile.R
 \name{check_if_update}
 \alias{check_if_update}
-\title{Check id file is recent}
+\title{Check if file is recent}
 \usage{
 check_if_update(path_file, margin_days)
 }
