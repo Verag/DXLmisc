@@ -48,18 +48,18 @@ read_excel_allsheets <- function(filename, tibble = FALSE, engine = "readxl", ..
     sheets <- readxl::excel_sheets(filename)
 
     process_sheet <- function(sheet) {
-      data <- readxl::read_excel(filename, sheet = sheet)
+      data <- readxl::read_excel(filename, sheet = sheet, ...)
       colnames(data) <- janitor::make_clean_names(colnames(data))
       if (!tibble) {
         data <- as.data.frame(data)
       }
       data
     }
-  } else if (enfine == "openxlsx") {
+  } else if (engine == "openxlsx") {
     sheets <- openxlsx::getSheetNames(filename)
 
     process_sheet <- function(sheet) {
-      data <- openxlsx::read.xlsx(filename, sheet = sheet)
+      data <- openxlsx::read.xlsx(filename, sheet = sheet, ...)
       colnames(data) <- janitor::make_clean_names(colnames(data))
       if (!tibble) {
         data <- as.data.frame(data)
