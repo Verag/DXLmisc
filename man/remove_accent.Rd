@@ -2,18 +2,18 @@
 % Please edit documentation in R/RemoveAccent.R
 \name{remove_accent}
 \alias{remove_accent}
-\title{remove all accent from string}
+\title{Remove All Accents from Strings}
 \usage{
 remove_accent(str, pattern = "all")
 }
 \arguments{
-\item{str}{character variable}
+\item{str}{A character vector to process.}
 
-\item{pattern}{numeric variable}
+\item{pattern}{A character vector indicating which accent types to remove. Defaults to `"all"`, which removes all accents.}
 }
 \value{
-string
+A character vector with accents removed.
 }
 \description{
-remove all accent from string
+This function removes accents from strings, converting accented characters to their unaccented equivalents.
 }

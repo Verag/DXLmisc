@@ -48,7 +48,7 @@ read_excel_allsheets <- function(filename, tibble = FALSE, engine = "readxl", ..
     sheets <- readxl::excel_sheets(filename)
 
     process_sheet <- function(sheet) {
-      data <- readxl::read_excel(filename, sheet = sheet, ...)
+      data <- readxl::read_excel(filename, sheet = sheet, guess_max = guess_max, ...)
       colnames(data) <- janitor::make_clean_names(colnames(data))
       if (!tibble) {
         data <- as.data.frame(data)

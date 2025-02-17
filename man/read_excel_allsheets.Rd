@@ -4,13 +4,7 @@
 \alias{read_excel_allsheets}
 \title{Read all sheets from an Excel file and clean column and sheet names}
 \usage{
-read_excel_allsheets(
-  filename,
-  tibble = FALSE,
-  engine = "readxl",
-  sheet_names = NULL,
-  ...
-)
+read_excel_allsheets(filename, tibble = FALSE, engine = "readxl", ...)
 }
 \arguments{
 \item{filename}{A string indicating the path to the Excel file.}
@@ -20,9 +14,9 @@ read_excel_allsheets(
 \item{engine}{A string indicating which package to use for reading the Excel file.
 Options are `"readxl"` (default) or `"openxlsx"`.}
 
-\item{sheet_names}{A character vector of specific sheet names to read. If `NULL` (default), all sheets are read.}
-
 \item{...}{Additional arguments passed to the underlying reading functions (`readxl::read_excel` or `openxlsx::read.xlsx`).}
+
+\item{sheet_names}{A character vector of specific sheet names to read. If `NULL` (default), all sheets are read.}
 }
 \value{
 A named list where each element is a data frame or tibble containing the data from one sheet.
@@ -46,7 +40,8 @@ and optionally read specific sheets.
 results <- read_excel_allsheets("data.xlsx", tibble = TRUE, engine = "readxl")
 
 # Read specific sheets using openxlsx
-results <- read_excel_allsheets("data.xlsx", engine = "openxlsx", sheet_names = c("Sheet1", "Sheet2"))
+results <- read_excel_allsheets("data.xlsx", engine = "openxlsx",
+sheet_names = c("Sheet1", "Sheet2"))
 
 # Pass additional arguments to read_excel (e.g., skip rows)
 results <- read_excel_allsheets("data.xlsx", engine = "readxl", skip = 1)
